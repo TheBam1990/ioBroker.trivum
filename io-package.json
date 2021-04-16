@@ -1,0 +1,97 @@
+{
+	"common": {
+		"name": "trivum",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"zh-cn": "首次出版"
+			}
+		},
+		"title": "trivum",
+		"titleLang": {
+			"en": "trivum",
+			"de": "trivum",
+			"ru": "тривиум",
+			"pt": "trivum",
+			"nl": "trivum",
+			"fr": "trivum",
+			"it": "trivum",
+			"es": "trivum",
+			"pl": "trywialny",
+			"zh-cn": "琐事"
+		},
+		"desc": {
+			"en": "trivum multiroom system",
+			"de": "Trivum Multiroom-System",
+			"ru": "мультирум система trivum",
+			"pt": "sistema trivum multiroom",
+			"nl": "trivum multiroom-systeem",
+			"fr": "système multiroom trivum",
+			"it": "sistema trivum multiroom",
+			"es": "sistema trivum multiroom",
+			"pl": "Trivum system multiroom",
+			"zh-cn": "琐事多室系统"
+		},
+		"authors": [
+			"TheBam <elektrobam@gmx.de>"
+		],
+		"keywords": [
+			"Hardware",
+			"Multiroom"
+		],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "trivum.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/TheBam1990/ioBroker.trivum/master/admin/trivum.png",
+		"readme": "https://github.com/TheBam1990/ioBroker.trivum/blob/master/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "hardware",
+		"compact": true,
+		"connectionType": "local",
+		"dataSource": "poll",
+		"materialize": true,
+		"dependencies": [
+			{
+				"js-controller": ">=2.0.0"
+			}
+		]
+	},
+	"native": {
+		"adresse": ""
+	},
+	"objects": [],
+	"instanceObjects": [   
+		{
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        }, {
+		"_id": "info.connection",
+		"type": "state",
+		"common": {
+		  "role": "indicator.connected",
+		  "name": "If connected to my gateway",
+		  "type": "boolean",
+		  "read": true,
+		  "write": false,
+		  "def": false
+		},
+		"native": {}
+	  }
+	]
+}

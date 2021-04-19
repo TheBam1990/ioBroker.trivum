@@ -13,15 +13,15 @@ const axios = require('axios').default;
 let devicesin;		//hilsvariable ob daten eingetragen sind oder nicht
 let IP;		//IP Adresse des Gerätes
 let getAllZonesURL;	//vollständige adresse für get all zone
-let getstatusnowURL;
-let getstatuschangeURL;
-const generatedArray = [];
-var trivum_adapter;
+let getstatusnowURL;  //Aktuelle status einer Zone alles zurück geben
+let getstatuschangeURL;  //nur änderungen einer Zone zurück geben
+const generatedArray = [];	//erstelltes Array aus der Get all zone
+var trivum_adapter;	//hilfsvariable für this.
 let timedefoults;	//Timer für verzögertes rücksetzen valou
-let time;
-let time2;
+let time;		//kontrolle ob request zurück kommt wenn nicht nach 40sec. info.con. auf false
+let time2;		//1sec wartezeit nach get all aufruf bis zum schreiben der variablen
 let unchanged="0";
-let testing="1";
+let testing="1";		//prüfung für timeout request
 
 
 
@@ -65,11 +65,12 @@ class Trivum extends utils.Adapter {
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
 		await this.setStateAsync('info.connection', {val: false, ack: true});
-		this.log.info("config adresse: " + this.config.adresse);
+		//this.log.info("config adresse: " + this.config.adresse);
 		this.subscribeStates('*.*');
 
 
 		if (this.config.adresse !== "") {		//abfrage ob IP eingetragen ist
+			this.log.info("config adresse: " + this.config.adresse);
 			devicesin=true;						//Variable setzen wenn adresse eingetragen ist
 			IP = this.config.adresse;			//werte von index als Daten übergeben
 			getAllZonesURL= "http://"+IP+"/xml/zone/getAll.xml" 	//Abfrage URL
@@ -89,6 +90,7 @@ class Trivum extends utils.Adapter {
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"
 		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
+		erstellen der Variablen
 		*/
 		await this.setObjectNotExistsAsync("Global.ALLOFF", {
 			type: "state",
@@ -129,7 +131,7 @@ class Trivum extends utils.Adapter {
 		});*/
 
 
-		
+		//Zonen mit den variablen erstellen
 		for (const test in generatedArray) {
 			try {
 			ZONECMD_MUTE_ON ="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=680";
@@ -285,18 +287,19 @@ class Trivum extends utils.Adapter {
 
 		result = await this.checkGroupAsync("admin", "admin");
 		this.log.info("check group user admin group admin: " + result);*/
+		//Schreiben der variablen nach dem sie erstellt wurden.
 		for (const values in generatedArray) {
 			await this.setStateAsync(nameFilter(generatedArray[values].description)+"."+ "Status", { val: generatedArray[values].status, ack: true });
 			await this.setStateAsync(nameFilter(generatedArray[values].description)+"."+ "VOLUME", { val: generatedArray[values].volume, ack: true }); 
 	}
-		
+		//aufrufen der Funktion die bei änderung daten schreibt
 		if (devicesin === true) {
 			this.readchanges();
 			}
 		
 	}
 
-
+	//Daten abrufen und in die Variablen schreiben
 	async readchanges() {
 		try {
 			getstatusnowURL= "http://"+IP+"/xml/zone/getChanges.xml?zone=@0&clientid=90&now&apilevel=3";				//"/xml/zone/getChanges.xml?visuid=90&now";
@@ -328,7 +331,7 @@ class Trivum extends utils.Adapter {
 			//}
 
 			unchanged=result4.rows.system.activeZones._text;
-		}
+		}		//kontrolle ob verbindung noch da ist ansonten connetcion lost
 			trivum_adapter.setStateAsync("info.connection", true);
 			clearTimeout(time);
 			time = setTimeout(() => {
@@ -364,6 +367,7 @@ class Trivum extends utils.Adapter {
 		
 	}
 
+	//Anfrage für all Zone
 	async getHttpData(apiAdres){
 		try {
 			this.log.debug("test "+apiAdres);
@@ -417,6 +421,7 @@ class Trivum extends utils.Adapter {
 	 * @param {string} id
 	 * @param {ioBroker.State | null | undefined} state
 	 */
+	//änderungen an states überwachen und zum gerät schreiben
 	async onStateChange(id, state) {
 		if (state && state.ack === false) {
 			// The state was changed and Ack

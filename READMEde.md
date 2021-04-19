@@ -22,15 +22,23 @@ Im Tab Haupteinstellungen die IP Adresse des Gerätes eingeben.
 Der Adapter sucht automatisch dann nach den verfügbaren Zonen und schreibt diese mit den dazugehörigen Objekten in die Objektliste.
 
 Es werden erstellt als Übergreifende Variablen (Global):
+
 -Alles ausschalten
+
 -Aktive Zonen (wie viele Zonen derzeit an sind)
 
 Dann unter den einzelnen Zonen die jeweiligen steuer elemente:
+
 -Muten (Stumm schalten und wieder aktiv schalten)
+
 -Defoult-Stream (Einschaltend er Zone mit dem Standard webstream)
+
 -Defoult-Tuner (Einschaltend er Zone mit dem Standard Tuner)
+
 -Volume (Anzeigen der Lautstärker und verändern von dieser)
+
 -Zone-Off (Ausschalten der Zone)
+
 -Status der Zone (Zeigt an ob Zone an oder aus ist)
 
 

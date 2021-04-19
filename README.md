@@ -21,15 +21,23 @@ Enter the IP address of the device in the main settings tab.
 The adapter then automatically searches for the available zones and writes them with the associated objects in the object list.
 
 The following are created as general variables (global):
+
 -Turn everything off
+
 -Active zones (how many zones are currently on)
 
 Then the respective control elements under the individual zones:
+
 -Mute (mute and reactivate)
+
 -Defoult-Stream (activating the zone with the standard webstream)
+
 -Defoult tuner (activating the zone with the standard tuner)
+
 -Volume (display the volume and change it)
+
 -Zone-Off (switch off the zone)
+
 -Status of the zone (shows whether the zone is on or off)
 
 

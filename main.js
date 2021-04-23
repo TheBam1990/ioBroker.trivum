@@ -310,6 +310,7 @@ class Trivum extends utils.Adapter {
 			//trivum_adapter.log.info("read change infos "+JSON.stringify(result4));
 			//trivum_adapter.log.info("Aktive Zonen "+JSON.stringify(result4.rows.system.activeZones._text));
 			await this.setStateAsync("Global.Aktive_zonen", { val: result4.rows.system.activeZones._text, ack: true });
+			await this.setStateAsync("info.connection", { val: true, ack: true });
 			
 			
 			try{
@@ -325,6 +326,7 @@ class Trivum extends utils.Adapter {
 					for (const values in generatedArray) {
 						await trivum_adapter.setStateAsync(nameFilter(generatedArray[values].description)+"."+ "Status", { val: generatedArray[values].status, ack: true });
 						await trivum_adapter.setStateAsync(nameFilter(generatedArray[values].description)+"."+ "VOLUME", { val: generatedArray[values].volume, ack: true }); 
+						await trivum_adapter.setStateAsync("info.connection", { val: true, ack: true });
 				}
 				  }, 1000);
 				

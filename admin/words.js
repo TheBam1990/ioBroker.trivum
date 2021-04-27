@@ -38,5 +38,5 @@ systemDictionary = {
 		"pl": "Potrzebujesz tylko adresu IP swojego urządzenia Trivum.<br> Następnie adapter pobiera wszystkie niezbędne dane i tworzy wszystkie punkty danych.",
 		"zh-cn": "您只需要Trivum设备的IP地址。<br>然后，适配器获取所有必需的数据并创建所有数据点。"
 	},
-    
+
 };

@@ -3,6 +3,18 @@
 		"name": "trivum",
 		"version": "0.0.2",
 		"news": {
+			"0.0.2": {
+                "en": "Cleaning the code",
+   				"de": "Code bereinigen",
+    			"ru": "Очистка кода",
+    			"pt": "Limpando o código",
+    			"nl": "De code opschonen",
+    			"fr": "Nettoyer le code",
+    			"it": "Pulizia del codice",
+    			"es": "Limpiando el código",
+    			"pl": "Czyszczenie kodu",
+    			"zh-cn": "清理代码"
+            },
 			"0.0.1": {
 				"en": "initial release",
 				"de": "Erstveröffentlichung",

@@ -44,7 +44,7 @@ Then the respective control elements under the individual zones:
 ## Changelog
 
 ### 0.0.2
-* (TheBam) Changes values and Cleaning the code
+* (TheBam) Cleaning the code
 
 ### 0.0.1
 * (TheBam) First version to control your Trivum Multiroom Systems

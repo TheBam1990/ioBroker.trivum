@@ -7,8 +7,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
-const zone = [];	//Zonennummer und Raumname gespeichert in einem Array
-var convert = require('xml-js');
+const convert = require('xml-js');
 const axios = require('axios').default;
 let devicesin;		//hilsvariable ob daten eingetragen sind oder nicht
 let IP;		//IP Adresse des Gerätes
@@ -16,11 +15,10 @@ let getAllZonesURL;	//vollständige adresse für get all zone
 let getstatusnowURL;  //Aktuelle status einer Zone alles zurück geben
 let getstatuschangeURL;  //nur änderungen einer Zone zurück geben
 const generatedArray = [];	//erstelltes Array aus der Get all zone
-var trivum_adapter;	//hilfsvariable für this.
+let trivum_adapter;	//hilfsvariable für this.
 let timedefoults;	//Timer für verzögertes rücksetzen valou
 let time;		//kontrolle ob request zurück kommt wenn nicht nach 40sec. info.con. auf false
 let time2;		//1sec wartezeit nach get all aufruf bis zum schreiben der variablen
-let unchanged="0";
 let testing="1";		//prüfung für timeout request
 
 
@@ -97,7 +95,7 @@ class Trivum extends utils.Adapter {
 			common: {
 				name: "alles_aus",
 				type: "boolean",
-				role: "indicator",
+				role: "button",
 				read: false,
 				write: true,
 			},
@@ -110,7 +108,7 @@ class Trivum extends utils.Adapter {
 			common: {
 				name: "aktiv_zone",
 				type: "number",
-				role: "indicator",
+				role: "value",
 				read: true,
 				write: false,
 			},
@@ -148,7 +146,7 @@ class Trivum extends utils.Adapter {
 				common: {
 					name: "Mute",
 					type: "boolean",
-					role: "indicator",
+					role: "text",
 					read: false,
 					write: true,
 				},
@@ -163,7 +161,7 @@ class Trivum extends utils.Adapter {
 				common: {
 					name: "DEFAULT_STREAMING",
 					type: "boolean",
-					role: "indicator",
+					role: "button",
 					read: false,
 					write: true,
 				},
@@ -179,7 +177,7 @@ class Trivum extends utils.Adapter {
 				common: {
 					name: "ZONECMD_DEFAULT_TUNER",
 					type: "boolean",
-					role: "indicator",
+					role: "button",
 					read: false,
 					write: true,
 				},
@@ -195,7 +193,7 @@ class Trivum extends utils.Adapter {
 				common: {
 					name: "VOLUME",
 					type: "number",
-					role: "indicator",
+					role: "value",
 					read: true,
 					write: true,
 				},
@@ -211,7 +209,7 @@ class Trivum extends utils.Adapter {
 				common: {
 					name: "Zone_OFF",
 					type: "boolean",
-					role: "indicator",
+					role: "button",
 					read: false,
 					write: true,
 				},
@@ -227,7 +225,7 @@ class Trivum extends utils.Adapter {
 				common: {
 					name: "Status",
 					type: "string",
-					role: "indicator",
+					role: "text",
 					read: false,
 					write: true,
 				},
@@ -305,7 +303,7 @@ class Trivum extends utils.Adapter {
 			getstatusnowURL= "http://"+IP+"/xml/zone/getChanges.xml?zone=@0&clientid=90&now&apilevel=3";				//"/xml/zone/getChanges.xml?visuid=90&now";
 			getstatuschangeURL="http://"+IP+"/xml/zone/getChanges.xml?zone=@0&clientid=90&onlyChange&apilevel=3";			//"http://"+IP+"/xml/zone/getChanges.xml?visuid=90&onlyChanges"
 			const rec = await axios.get(getstatuschangeURL);
-			var returned = convert.xml2json(rec.data, {compact: true, spaces: 4});
+			const returned = convert.xml2json(rec.data, {compact: true, spaces: 4});
 			const result4=JSON.parse(returned);
 			//trivum_adapter.log.info("read change infos "+JSON.stringify(result4));
 			//trivum_adapter.log.info("Aktive Zonen "+JSON.stringify(result4.rows.system.activeZones._text));
@@ -319,8 +317,7 @@ class Trivum extends utils.Adapter {
 			}
 			}catch (e){
 
-			
-			//if (unchanged!=result4.rows.system.activeZones._text){
+
 				trivum_adapter.getHttpData(getAllZonesURL);
 				time2=setTimeout(async function() {
 					for (const values in generatedArray) {
@@ -329,10 +326,7 @@ class Trivum extends utils.Adapter {
 						await trivum_adapter.setStateAsync("info.connection", { val: true, ack: true });
 				}
 				  }, 1000);
-				
-			//}
 
-			unchanged=result4.rows.system.activeZones._text;
 		}		//kontrolle ob verbindung noch da ist ansonten connetcion lost
 			trivum_adapter.setStateAsync("info.connection", true);
 			clearTimeout(time);
@@ -374,11 +368,10 @@ class Trivum extends utils.Adapter {
 		try {
 			this.log.debug("test "+apiAdres);
 			const resp = await axios.get(apiAdres);	
-			var result1 = convert.xml2json(resp.data, {compact: true, spaces: 4});
+			const result1 = convert.xml2json(resp.data, {compact: true, spaces: 4});
 			//var result2 = convert.xml2json(result, {compact: false, spaces: 4});
 			const result3=JSON.parse(result1);
 			trivum_adapter.log.debug("result3 "+JSON.stringify(result3));
-			const txt = [];
 			for (const i in result3.rows.zone){
 				
 				generatedArray[i] = {		
@@ -389,7 +382,7 @@ class Trivum extends utils.Adapter {
 				}
 
 			}
-	
+			await trivum_adapter.setStateAsync("info.connection", { val: true, ack: true });
 			trivum_adapter.log.debug("länge "+generatedArray.length)
 			trivum_adapter.log.debug(`erstelltes array ${JSON.stringify(generatedArray)}`)
 	
@@ -447,10 +440,10 @@ class Trivum extends utils.Adapter {
 					this.log.debug(`state wurde erkannt`);
 					if (state.val===true){
 						axios(obj.native.ZONECMD_MUTE_ON);
-						this.log.debug(`sende code ${JSON.stringify(obj.native.ZONECMD_MUTE_ON)}`)
+						this.log.debug(`sende code ${JSON.stringify(obj.native.ZONECMD_MUTE_ON)}`);
 					} else {
 						axios(obj.native.ZONECMD_MUTE_OFF);
-						this.log.debug(`sende code ${JSON.stringify(obj.native.ZONECMD_MUTE_OFF)}`)
+						this.log.debug(`sende code ${JSON.stringify(obj.native.ZONECMD_MUTE_OFF)}`);
 					}
 					break;
 

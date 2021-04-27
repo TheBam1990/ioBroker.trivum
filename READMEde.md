@@ -48,6 +48,8 @@ Dann unter den einzelnen Zonen die jeweiligen steuer elemente:
  Placeholder for the next version (at the beginning of the line):
  ### __WORK IN PROGRESS__ ( - falls nicht benötigt löschen sonst klammern entfernen und nach dem - dein text schreiben )
 -->
+### 0.0.2
+* (TheBam) Variablen geändert und code aufgeräumt
 
 ### 0.0.1
 * (Thebam) initial release

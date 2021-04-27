@@ -1,4 +1,4 @@
-//"use strict";
+"use strict";
 
 /*
  * Created with @iobroker/create-adapter v1.31.0
@@ -7,19 +7,19 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
-const convert = require('xml-js');
-const axios = require('axios').default;
+const convert = require("xml-js");
+const axios = require("axios").default;
 let devicesin;		//hilsvariable ob daten eingetragen sind oder nicht
 let IP;		//IP Adresse des Gerätes
 let getAllZonesURL;	//vollständige adresse für get all zone
-let getstatusnowURL;  //Aktuelle status einer Zone alles zurück geben
+//let getstatusnowURL;  //Aktuelle status einer Zone alles zurück geben
 let getstatuschangeURL;  //nur änderungen einer Zone zurück geben
 const generatedArray = [];	//erstelltes Array aus der Get all zone
 let trivum_adapter;	//hilfsvariable für this.
 let timedefoults;	//Timer für verzögertes rücksetzen valou
 let time;		//kontrolle ob request zurück kommt wenn nicht nach 40sec. info.con. auf false
 let time2;		//1sec wartezeit nach get all aufruf bis zum schreiben der variablen
-let testing="1";		//prüfung für timeout request
+const testing="1";		//prüfung für timeout request
 
 
 
@@ -62,16 +62,16 @@ class Trivum extends utils.Adapter {
 		let ZONECMD_POWER_OFF;
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
-		await this.setStateAsync('info.connection', {val: false, ack: true});
+		await this.setStateAsync("info.connection", {val: false, ack: true});
 		//this.log.info("config adresse: " + this.config.adresse);
-		this.subscribeStates('*.*');
+		this.subscribeStates("*.*");
 
 
 		if (this.config.adresse !== "") {		//abfrage ob IP eingetragen ist
 			this.log.info("config adresse: " + this.config.adresse);
 			devicesin=true;						//Variable setzen wenn adresse eingetragen ist
 			IP = this.config.adresse;			//werte von index als Daten übergeben
-			getAllZonesURL= "http://"+IP+"/xml/zone/getAll.xml" 	//Abfrage URL
+			getAllZonesURL= "http://"+IP+"/xml/zone/getAll.xml"; 	//Abfrage URL
 			this.getHttpData(getAllZonesURL);		//Abfrage der Daten vom Gerät
 			this.log.info("http anfrage wird gesendet");		//Kontrolle ob anfrage raus geht
 			await this.setStateAsync("info.connection", { val: true, ack: true });
@@ -79,7 +79,7 @@ class Trivum extends utils.Adapter {
 		} else {
 			devicesin=false;
 			this.log.info("http anfrage fehlgeschlagen");
-			await this.setStateAsync('info.connection', {val: false, ack: true});
+			await this.setStateAsync("info.connection", {val: false, ack: true});
 			return;
 		}
 
@@ -132,112 +132,112 @@ class Trivum extends utils.Adapter {
 		//Zonen mit den variablen erstellen
 		for (const test in generatedArray) {
 			try {
-			ZONECMD_MUTE_ON ="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=680";
-			ZONECMD_MUTE_OFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=681";
-			DEFAULT_STREAMING="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=50";
-			VOLUME="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=9";
-			ZONECMD_DEFAULT_TUNER="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=51";
-			ZONECMD_POWER_OFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=1";
-			this.log.debug(`erstelltes array ${JSON.stringify(generatedArray[test].description)}`);
+				ZONECMD_MUTE_ON ="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=680";
+				ZONECMD_MUTE_OFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=681";
+				DEFAULT_STREAMING="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=50";
+				VOLUME="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=9";
+				ZONECMD_DEFAULT_TUNER="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=51";
+				ZONECMD_POWER_OFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=1";
+				this.log.debug(`erstelltes array ${JSON.stringify(generatedArray[test].description)}`);
 
-			
-			await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "Muten", {
-				type: "state",
-				common: {
-					name: "Mute",
-					type: "boolean",
-					role: "text",
-					read: false,
-					write: true,
-				},
-				native: {
-					ZONECMD_MUTE_ON,
-					ZONECMD_MUTE_OFF
-				},
-			});
 
-			await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "DEFAULT_STREAMING", {
-				type: "state",
-				common: {
-					name: "DEFAULT_STREAMING",
-					type: "boolean",
-					role: "button",
-					read: false,
-					write: true,
-				},
-				native: {
-					DEFAULT_STREAMING
-				},
+				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "Muten", {
+					type: "state",
+					common: {
+						name: "Mute",
+						type: "boolean",
+						role: "text",
+						read: false,
+						write: true,
+					},
+					native: {
+						ZONECMD_MUTE_ON,
+						ZONECMD_MUTE_OFF
+					},
+				});
 
-				
-			});
+				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "DEFAULT_STREAMING", {
+					type: "state",
+					common: {
+						name: "DEFAULT_STREAMING",
+						type: "boolean",
+						role: "button",
+						read: false,
+						write: true,
+					},
+					native: {
+						DEFAULT_STREAMING
+					},
 
-			await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "ZONECMD_DEFAULT_TUNER", {
-				type: "state",
-				common: {
-					name: "ZONECMD_DEFAULT_TUNER",
-					type: "boolean",
-					role: "button",
-					read: false,
-					write: true,
-				},
-				native: {
-					ZONECMD_DEFAULT_TUNER
-				},
 
-				
-			});
+				});
 
-			await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "VOLUME", {
-				type: "state",
-				common: {
-					name: "VOLUME",
-					type: "number",
-					role: "value",
-					read: true,
-					write: true,
-				},
-				native: {
-					VOLUME
-				},
+				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "ZONECMD_DEFAULT_TUNER", {
+					type: "state",
+					common: {
+						name: "ZONECMD_DEFAULT_TUNER",
+						type: "boolean",
+						role: "button",
+						read: false,
+						write: true,
+					},
+					native: {
+						ZONECMD_DEFAULT_TUNER
+					},
 
-				
-			});
 
-			await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "ZONECMD_POWER_OFF", {
-				type: "state",
-				common: {
-					name: "Zone_OFF",
-					type: "boolean",
-					role: "button",
-					read: false,
-					write: true,
-				},
-				native: {
-					ZONECMD_POWER_OFF
-				},
+				});
 
-				
-			});
+				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "VOLUME", {
+					type: "state",
+					common: {
+						name: "VOLUME",
+						type: "number",
+						role: "value",
+						read: true,
+						write: true,
+					},
+					native: {
+						VOLUME
+					},
 
-			await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "Status", {
-				type: "state",
-				common: {
-					name: "Status",
-					type: "string",
-					role: "text",
-					read: false,
-					write: true,
-				},
-				native: {
-				},
 
-				
-			});
+				});
 
-		} catch (error) { this.log.info("Error Arry "); }
-	
-		  }
+				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "ZONECMD_POWER_OFF", {
+					type: "state",
+					common: {
+						name: "Zone_OFF",
+						type: "boolean",
+						role: "button",
+						read: false,
+						write: true,
+					},
+					native: {
+						ZONECMD_POWER_OFF
+					},
+
+
+				});
+
+				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "Status", {
+					type: "state",
+					common: {
+						name: "Status",
+						type: "string",
+						role: "text",
+						read: false,
+						write: true,
+					},
+					native: {
+					},
+
+
+				});
+
+			} catch (error) { this.log.info("Error Arry "); }
+
+		}
 
 		/*for (const datapoint in this.generatedArray) {
 			let data;
@@ -288,19 +288,19 @@ class Trivum extends utils.Adapter {
 		//Schreiben der variablen nach dem sie erstellt wurden.
 		for (const values in generatedArray) {
 			await this.setStateAsync(nameFilter(generatedArray[values].description)+"."+ "Status", { val: generatedArray[values].status, ack: true });
-			await this.setStateAsync(nameFilter(generatedArray[values].description)+"."+ "VOLUME", { val: generatedArray[values].volume, ack: true }); 
-	}
+			await this.setStateAsync(nameFilter(generatedArray[values].description)+"."+ "VOLUME", { val: generatedArray[values].volume, ack: true });
+		}
 		//aufrufen der Funktion die bei änderung daten schreibt
 		if (devicesin === true) {
 			this.readchanges();
-			}
-		
+		}
+
 	}
 
 	//Daten abrufen und in die Variablen schreiben
 	async readchanges() {
 		try {
-			getstatusnowURL= "http://"+IP+"/xml/zone/getChanges.xml?zone=@0&clientid=90&now&apilevel=3";				//"/xml/zone/getChanges.xml?visuid=90&now";
+			//getstatusnowURL= "http://"+IP+"/xml/zone/getChanges.xml?zone=@0&clientid=90&now&apilevel=3";				//"/xml/zone/getChanges.xml?visuid=90&now";
 			getstatuschangeURL="http://"+IP+"/xml/zone/getChanges.xml?zone=@0&clientid=90&onlyChange&apilevel=3";			//"http://"+IP+"/xml/zone/getChanges.xml?visuid=90&onlyChanges"
 			const rec = await axios.get(getstatuschangeURL);
 			const returned = convert.xml2json(rec.data, {compact: true, spaces: 4});
@@ -309,12 +309,12 @@ class Trivum extends utils.Adapter {
 			//trivum_adapter.log.info("Aktive Zonen "+JSON.stringify(result4.rows.system.activeZones._text));
 			await this.setStateAsync("Global.Aktive_zonen", { val: result4.rows.system.activeZones._text, ack: true });
 			await this.setStateAsync("info.connection", { val: true, ack: true });
-			
-			
+
+
 			try{
 				if(testing==result4.rows.system.timeout._text){
-			trivum_adapter.log.debug("Timeout "+JSON.stringify(testing));
-			}
+					trivum_adapter.log.debug("Timeout "+JSON.stringify(testing));
+				}
 			}catch (e){
 
 
@@ -322,12 +322,12 @@ class Trivum extends utils.Adapter {
 				time2=setTimeout(async function() {
 					for (const values in generatedArray) {
 						await trivum_adapter.setStateAsync(nameFilter(generatedArray[values].description)+"."+ "Status", { val: generatedArray[values].status, ack: true });
-						await trivum_adapter.setStateAsync(nameFilter(generatedArray[values].description)+"."+ "VOLUME", { val: generatedArray[values].volume, ack: true }); 
+						await trivum_adapter.setStateAsync(nameFilter(generatedArray[values].description)+"."+ "VOLUME", { val: generatedArray[values].volume, ack: true });
 						await trivum_adapter.setStateAsync("info.connection", { val: true, ack: true });
-				}
-				  }, 1000);
+					}
+				}, 1000);
 
-		}		//kontrolle ob verbindung noch da ist ansonten connetcion lost
+			}		//kontrolle ob verbindung noch da ist ansonten connetcion lost
 			trivum_adapter.setStateAsync("info.connection", true);
 			clearTimeout(time);
 			time = setTimeout(() => {
@@ -337,8 +337,8 @@ class Trivum extends utils.Adapter {
 			this.readchanges();
 
 		}catch (e) {
-			trivum_adapter.log.error(e); 
-			await this.setStateAsync('info.connection', {val: false, ack: true});
+			trivum_adapter.log.error(e);
+			await this.setStateAsync("info.connection", {val: false, ack: true});
 			return;
 		}
 	}
@@ -351,7 +351,7 @@ class Trivum extends utils.Adapter {
 	onUnload(callback) {
 		try {
 			// Here you must clear all timeouts or intervals that may still be active
-			
+
 			clearTimeout(timedefoults);
 			clearTimeout(time);
 			clearTimeout(time2);
@@ -360,39 +360,39 @@ class Trivum extends utils.Adapter {
 		} catch (e) {
 			callback();
 		}
-		
+
 	}
 
 	//Anfrage für all Zone
 	async getHttpData(apiAdres){
 		try {
 			this.log.debug("test "+apiAdres);
-			const resp = await axios.get(apiAdres);	
+			const resp = await axios.get(apiAdres);
 			const result1 = convert.xml2json(resp.data, {compact: true, spaces: 4});
 			//var result2 = convert.xml2json(result, {compact: false, spaces: 4});
 			const result3=JSON.parse(result1);
 			trivum_adapter.log.debug("result3 "+JSON.stringify(result3));
 			for (const i in result3.rows.zone){
-				
-				generatedArray[i] = {		
+
+				generatedArray[i] = {
 					"id" : result3.rows.zone[i].id._text,
 					"status" : result3.rows.zone[i].status._text,
 					"description" : result3.rows.zone[i].description._text,
 					"volume" : result3.rows.zone[i].volume._text,
-				}
+				};
 
 			}
 			await trivum_adapter.setStateAsync("info.connection", { val: true, ack: true });
-			trivum_adapter.log.debug("länge "+generatedArray.length)
-			trivum_adapter.log.debug(`erstelltes array ${JSON.stringify(generatedArray)}`)
-	
-		
-		} catch (e) {
-			 trivum_adapter.log.error(e); 
-			 await this.setStateAsync('info.connection', {val: false, ack: true});
-			 devicesin=false;
+			trivum_adapter.log.debug("länge "+generatedArray.length);
+			trivum_adapter.log.debug(`erstelltes array ${JSON.stringify(generatedArray)}`);
 
-			}
+
+		} catch (e) {
+			trivum_adapter.log.error(e);
+			await this.setStateAsync("info.connection", {val: false, ack: true});
+			devicesin=false;
+
+		}
 	}
 	// If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
 	// You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
@@ -421,9 +421,9 @@ class Trivum extends utils.Adapter {
 		if (state && state.ack === false) {
 			// The state was changed and Ack
 			this.log.debug(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-			const tmp = id.split('.');
+			const tmp = id.split(".");
 			this.log.debug(`state ${tmp}`);
-			const objName = tmp.slice(3).join('.');
+			const objName = tmp.slice(3).join(".");
 			this.log.debug(`state ${objName}`);
 			const obj = await this.getObjectAsync(id);
 
@@ -432,7 +432,7 @@ class Trivum extends utils.Adapter {
 				return;
 			}
 
-			this.log.debug(`Objekt ${JSON.stringify(obj.native)}`)
+			this.log.debug(`Objekt ${JSON.stringify(obj.native)}`);
 
 			switch(objName){
 
@@ -477,12 +477,11 @@ class Trivum extends utils.Adapter {
 					break;
 
 				case "VOLUME":
-					let vol=state.val;
-					if (vol!=null && vol<10){
-						vol="0"+state.val;
+					if (state.val!=null && state.val<10){
+						state.val="0"+state.val;
 					}
-						axios(obj.native.VOLUME+vol);
-						this.log.debug(`Lautstärke ausgelöst `+obj.native.VOLUME+vol);
+					axios(obj.native.VOLUME+state.val);
+					this.log.debug(`Lautstärke ausgelöst `+obj.native.VOLUME+state.val);
 					break;
 
 			}
@@ -521,7 +520,7 @@ class Trivum extends utils.Adapter {
 
 function nameFilter(name) {
 	const signs = [String.fromCharCode(46), String.fromCharCode(44), String.fromCharCode(92), String.fromCharCode(47), String.fromCharCode(91), String.fromCharCode(93), String.fromCharCode(123), String.fromCharCode(125), String.fromCharCode(32), String.fromCharCode(129), String.fromCharCode(154), String.fromCharCode(132), String.fromCharCode(142), String.fromCharCode(148), String.fromCharCode(153)]; //46=. 44=, 92=\ 47=/ 91=[ 93=] 123={ 125=} 32=Space 129=ü 154=Ü 132=ä 142=Ä 148=ö 153=Ö
-	signs.forEach((item, index) => {
+	signs.forEach((item) => {
 		const count = name.split(item).length - 1;
 
 		for (let i = 0; i < count; i++) {

@@ -42,6 +42,8 @@ Then the respective control elements under the individual zones:
 
 
 ## Changelog
+### 0.0.3 (2021-04-29)
+* (TheBam) Cleaning the code
 
 ### 0.0.2
 * (TheBam) Cleaning the code

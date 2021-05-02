@@ -68,12 +68,12 @@ class Trivum extends utils.Adapter {
 
 
 		if (this.config.adresse !== "") {		//abfrage ob IP eingetragen ist
-			this.log.info("config adresse: " + this.config.adresse);
+			this.log.debug("config adresse: " + this.config.adresse);
 			devicesin=true;						//Variable setzen wenn adresse eingetragen ist
 			IP = this.config.adresse;			//werte von index als Daten übergeben
 			getAllZonesURL= "http://"+IP+"/xml/zone/getAll.xml"; 	//Abfrage URL
 			this.getHttpData(getAllZonesURL);		//Abfrage der Daten vom Gerät
-			this.log.info("http anfrage wird gesendet");		//Kontrolle ob anfrage raus geht
+			this.log.debug("http anfrage wird gesendet");		//Kontrolle ob anfrage raus geht
 			await this.setStateAsync("info.connection", { val: true, ack: true });
 			ALLOFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@0&command=15";	//befehl erstellen zum ausschalten der Zonen
 		} else {
@@ -328,10 +328,10 @@ class Trivum extends utils.Adapter {
 				}, 1000);
 
 			}		//kontrolle ob verbindung noch da ist ansonten connetcion lost
-			trivum_adapter.setStateAsync("info.connection", true);
+			trivum_adapter.setStateAsync("info.connection", { val: true, ack: true });
 			clearTimeout(time);
 			time = setTimeout(() => {
-				trivum_adapter.setStateAsync("info.connection", false);
+				trivum_adapter.setStateAsync("info.connection", { val: false, ack: true });
 			}, 40000);
 
 			this.readchanges();

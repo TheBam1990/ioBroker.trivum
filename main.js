@@ -78,7 +78,7 @@ class Trivum extends utils.Adapter {
 			ALLOFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@0&command=15";	//befehl erstellen zum ausschalten der Zonen
 		} else {
 			devicesin=false;
-			this.log.info("http anfrage fehlgeschlagen");
+			this.log.debug("http anfrage fehlgeschlagen");
 			await this.setStateAsync("info.connection", {val: false, ack: true});
 			return;
 		}
@@ -107,7 +107,7 @@ class Trivum extends utils.Adapter {
 			type: "state",
 			common: {
 				name: "aktiv_zone",
-				type: "number",
+				type: "string",
 				role: "value",
 				read: true,
 				write: false,
@@ -192,7 +192,7 @@ class Trivum extends utils.Adapter {
 					type: "state",
 					common: {
 						name: "VOLUME",
-						type: "number",
+						type: "string",
 						role: "value",
 						read: true,
 						write: true,

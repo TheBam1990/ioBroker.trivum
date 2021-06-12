@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "trivum",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "news": {
+            "0.0.4": {
+                "en": "Paging added and info.connection fixed for admin 5",
+                "de": "Paging hinzugefügt und info.connection für Admin behoben 5",
+                "ru": "Добавлен пейджинг и исправлено соединение с администратором 5",
+                "pt": "Paginação adicionada e info.connection corrigida para o administrador 5",
+                "nl": "Paging toegevoegd en info.connection gerepareerd voor admin 5",
+                "fr": "Pagination ajoutée et info.connection corrigée pour admin 5",
+                "it": "Paging aggiunto e info.connection risolto per l'amministratore 5",
+                "es": "Se agregó paginación y se corrigió la conexión de información para el administrador 5",
+                "pl": "Dodano stronicowanie i naprawiono info.connection dla administratora 5",
+                "zh-cn": "添加了分页并为管理员 5 修复了 info.connection"
+            },
             "0.0.3": {
                 "en": "Cleaning the code",
                 "de": "Code bereinigen",
@@ -93,7 +105,8 @@
         ]
     },
     "native": {
-        "adresse": ""
+        "adresse": "",
+        "option3": ""
     },
     "objects": [],
     "instanceObjects": [

@@ -38,5 +38,17 @@ systemDictionary = {
 		"pl": "Potrzebujesz tylko adresu IP swojego urządzenia Trivum.<br> Następnie adapter pobiera wszystkie niezbędne dane i tworzy wszystkie punkty danych.",
 		"zh-cn": "您只需要Trivum设备的IP地址。<br>然后，适配器获取所有必需的数据并创建所有数据点。"
 	},
+	"option3": {
+		"en": "How many announcements would you like to use",
+		"de": "Wie viele Ansagen möchten Sie verwenden",
+		"ru": "Сколько объявлений вы хотели бы использовать",
+		"pt": "Quantos anúncios você gostaria de usar",
+		"nl": "Hoeveel aankondigingen wil je gebruiken",
+		"fr": "Combien d'annonces souhaitez-vous utiliser",
+		"it": "Quanti annunci desideri utilizzare",
+		"es": "¿Cuántos anuncios le gustaría usar?",
+		"pl": "Ile ogłoszeń chciałbyś użyć",
+		"zh-cn": "您想使用多少公告"
+	},
 
 };

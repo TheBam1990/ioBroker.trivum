@@ -42,6 +42,10 @@ Then the respective control elements under the individual zones:
 
 
 ## Changelog
+
+### 0.0.4 (2021-06-12)
+* (TheBam) Paging added and info.connection fixed for admin 5
+
 ### 0.0.3 (2021-04-29)
 * (TheBam) Cleaning the code
 

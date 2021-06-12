@@ -20,6 +20,7 @@ let timedefoults;	//Timer für verzögertes rücksetzen valou
 let time;		//kontrolle ob request zurück kommt wenn nicht nach 40sec. info.con. auf false
 let time2;		//1sec wartezeit nach get all aufruf bis zum schreiben der variablen
 const testing="1";		//prüfung für timeout request
+let paging;		//wie viele durchsagen soll es geben
 
 
 
@@ -71,6 +72,7 @@ class Trivum extends utils.Adapter {
 			this.log.debug("config adresse: " + this.config.adresse);
 			devicesin=true;						//Variable setzen wenn adresse eingetragen ist
 			IP = this.config.adresse;			//werte von index als Daten übergeben
+			paging = Number(this.config.option3);		//Abfrage wie viele Durchsagen es gibt
 			getAllZonesURL= "http://"+IP+"/xml/zone/getAll.xml"; 	//Abfrage URL
 			this.getHttpData(getAllZonesURL);		//Abfrage der Daten vom Gerät
 			this.log.debug("http anfrage wird gesendet");		//Kontrolle ob anfrage raus geht
@@ -127,6 +129,24 @@ class Trivum extends utils.Adapter {
 			native: {
 			},
 		});*/
+		if(paging>0 ){
+			for (var i = 0; i <= paging-1; i++) {
+				var aufrufen = "http://"+IP+"/xml/paging/start.xml?id="+i;
+				await this.setObjectNotExistsAsync("Global.Paging"+i, {
+					type: "state",
+					common: {
+						name: "Paging"+i,
+						type: "boolean",
+						role: "button",
+						read: false,
+						write: true,
+					},
+					native: {
+						aufrufen
+					},
+				});
+			}
+		}
 
 
 		//Zonen mit den variablen erstellen
@@ -339,6 +359,7 @@ class Trivum extends utils.Adapter {
 		}catch (e) {
 			trivum_adapter.log.error(e);
 			await this.setStateAsync("info.connection", {val: false, ack: true});
+			this.readchanges();
 			return;
 		}
 	}
@@ -434,6 +455,13 @@ class Trivum extends utils.Adapter {
 
 			this.log.debug(`Objekt ${JSON.stringify(obj.native)}`);
 
+			if (objName.startsWith("Paging")){
+				if (state.val===true){
+					axios(obj.native.aufrufen);
+					this.valueres(id);
+				}
+			}
+
 			switch(objName){
 
 				case "Muten":
@@ -483,6 +511,7 @@ class Trivum extends utils.Adapter {
 					axios(obj.native.VOLUME+state.val);
 					this.log.debug(`Lautstärke ausgelöst `+obj.native.VOLUME+state.val);
 					break;
+				
 
 			}
 		} else {

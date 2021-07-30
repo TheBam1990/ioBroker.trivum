@@ -93,7 +93,7 @@
         "readme": "https://github.com/TheBam1990/ioBroker.trivum/blob/master/README.md",
         "loglevel": "info",
         "mode": "daemon",
-        "type": "hardware",
+        "type": "multimedia",
         "compact": true,
         "connectionType": "local",
         "dataSource": "poll",

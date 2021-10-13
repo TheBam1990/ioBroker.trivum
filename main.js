@@ -21,7 +21,12 @@ let time;		//kontrolle ob request zurück kommt wenn nicht nach 40sec. info.con.
 let time2;		//1sec wartezeit nach get all aufruf bis zum schreiben der variablen
 const testing="1";		//prüfung für timeout request
 let paging;		//wie viele durchsagen soll es geben
-
+let ZONECMD_MUTE_ON;
+let ZONECMD_MUTE_OFF;
+let DEFAULT_STREAMING;
+let ZONECMD_DEFAULT_TUNER;
+let VOLUME;
+let ZONECMD_POWER_OFF;
 
 
 
@@ -55,18 +60,13 @@ class Trivum extends utils.Adapter {
 	async onReady() {
 		// Initialize your adapter here
 		let ALLOFF;
-		let ZONECMD_MUTE_ON;
-		let ZONECMD_MUTE_OFF;
-		let DEFAULT_STREAMING;
-		let ZONECMD_DEFAULT_TUNER;
-		let VOLUME;
-		let ZONECMD_POWER_OFF;
+
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
 		await this.setStateAsync("info.connection", {val: false, ack: true});
 		//this.log.info("config adresse: " + this.config.adresse);
 		this.subscribeStates("*.*");
-
+		this.log.debug("erster step");
 
 		if (this.config.adresse !== "") {		//abfrage ob IP eingetragen ist
 			this.log.debug("config adresse: " + this.config.adresse);
@@ -78,6 +78,7 @@ class Trivum extends utils.Adapter {
 			this.log.debug("http anfrage wird gesendet");		//Kontrolle ob anfrage raus geht
 			await this.setStateAsync("info.connection", { val: true, ack: true });
 			ALLOFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@0&command=15";	//befehl erstellen zum ausschalten der Zonen
+			this.log.debug("array erstellung gut");
 		} else {
 			devicesin=false;
 			this.log.debug("http anfrage fehlgeschlagen");
@@ -149,115 +150,10 @@ class Trivum extends utils.Adapter {
 		}
 
 
-		//Zonen mit den variablen erstellen
-		for (const test in generatedArray) {
-			try {
-				ZONECMD_MUTE_ON ="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=680";
-				ZONECMD_MUTE_OFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=681";
-				DEFAULT_STREAMING="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=50";
-				VOLUME="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=9";
-				ZONECMD_DEFAULT_TUNER="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=51";
-				ZONECMD_POWER_OFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=1";
-				this.log.debug(`erstelltes array ${JSON.stringify(generatedArray[test].description)}`);
+			
+		
 
-
-				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "Muten", {
-					type: "state",
-					common: {
-						name: "Mute",
-						type: "boolean",
-						role: "text",
-						read: false,
-						write: true,
-					},
-					native: {
-						ZONECMD_MUTE_ON,
-						ZONECMD_MUTE_OFF
-					},
-				});
-
-				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "DEFAULT_STREAMING", {
-					type: "state",
-					common: {
-						name: "DEFAULT_STREAMING",
-						type: "boolean",
-						role: "button",
-						read: false,
-						write: true,
-					},
-					native: {
-						DEFAULT_STREAMING
-					},
-
-
-				});
-
-				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "ZONECMD_DEFAULT_TUNER", {
-					type: "state",
-					common: {
-						name: "ZONECMD_DEFAULT_TUNER",
-						type: "boolean",
-						role: "button",
-						read: false,
-						write: true,
-					},
-					native: {
-						ZONECMD_DEFAULT_TUNER
-					},
-
-
-				});
-
-				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "VOLUME", {
-					type: "state",
-					common: {
-						name: "VOLUME",
-						type: "string",
-						role: "value",
-						read: true,
-						write: true,
-					},
-					native: {
-						VOLUME
-					},
-
-
-				});
-
-				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "ZONECMD_POWER_OFF", {
-					type: "state",
-					common: {
-						name: "Zone_OFF",
-						type: "boolean",
-						role: "button",
-						read: false,
-						write: true,
-					},
-					native: {
-						ZONECMD_POWER_OFF
-					},
-
-
-				});
-
-				await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+"."+ "Status", {
-					type: "state",
-					common: {
-						name: "Status",
-						type: "string",
-						role: "text",
-						read: false,
-						write: true,
-					},
-					native: {
-					},
-
-
-				});
-
-			} catch (error) { this.log.info("Error Arry "); }
-
-		}
+	
 
 		/*for (const datapoint in this.generatedArray) {
 			let data;
@@ -325,8 +221,8 @@ class Trivum extends utils.Adapter {
 			const rec = await axios.get(getstatuschangeURL);
 			const returned = convert.xml2json(rec.data, {compact: true, spaces: 4});
 			const result4=JSON.parse(returned);
-			//trivum_adapter.log.info("read change infos "+JSON.stringify(result4));
-			//trivum_adapter.log.info("Aktive Zonen "+JSON.stringify(result4.rows.system.activeZones._text));
+			trivum_adapter.log.debug("read change infos "+JSON.stringify(result4));
+			trivum_adapter.log.debug("Aktive Zonen "+JSON.stringify(result4.rows.system.activeZones._text));
 			await this.setStateAsync("Global.Aktive_zonen", { val: result4.rows.system.activeZones._text, ack: true });
 			await this.setStateAsync("info.connection", { val: true, ack: true });
 
@@ -406,6 +302,122 @@ class Trivum extends utils.Adapter {
 			await trivum_adapter.setStateAsync("info.connection", { val: true, ack: true });
 			trivum_adapter.log.debug("länge "+generatedArray.length);
 			trivum_adapter.log.debug(`erstelltes array ${JSON.stringify(generatedArray)}`);
+					//Zonen mit den variablen erstellen
+		// @ts-ignore
+		if(generatedArray!=""){
+			
+			for (const test in generatedArray) {
+				try {
+					trivum_adapter.log.debug(`erstelltes array vor 1 erstellung ${JSON.stringify(generatedArray[test].description)}`);
+					trivum_adapter.log.debug("ipadresse "+IP);
+					ZONECMD_MUTE_ON ="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=680";	
+					trivum_adapter.log.debug("ZONECMD_MUTE_ON "+ZONECMD_MUTE_ON);
+					ZONECMD_MUTE_OFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=681";
+					DEFAULT_STREAMING="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=50";
+					VOLUME="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=9";
+					ZONECMD_DEFAULT_TUNER="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=51";
+					ZONECMD_POWER_OFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=1";
+					this.log.debug(`erstelltes array vor erstellung ${JSON.stringify(generatedArray[test].description)}`);
+	
+	
+					await trivum_adapter.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".Muten", {
+						type: "state",
+						common: {
+							name: "Mute",
+							type: "boolean",
+							role: "text",
+							read: false,
+							write: true,
+						},
+						native: {
+							ZONECMD_MUTE_ON,
+							ZONECMD_MUTE_OFF
+						},
+					});
+	
+					await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".DEFAULT_STREAMING", {
+						type: "state",
+						common: {
+							name: "DEFAULT_STREAMING",
+							type: "boolean",
+							role: "button",
+							read: false,
+							write: true,
+						},
+						native: {
+							DEFAULT_STREAMING
+						},
+	
+	
+					});
+	
+					await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".ZONECMD_DEFAULT_TUNER", {
+						type: "state",
+						common: {
+							name: "ZONECMD_DEFAULT_TUNER",
+							type: "boolean",
+							role: "button",
+							read: false,
+							write: true,
+						},
+						native: {
+							ZONECMD_DEFAULT_TUNER
+						},
+	
+	
+					});
+	
+					await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".VOLUME", {
+						type: "state",
+						common: {
+							name: "VOLUME",
+							type: "string",
+							role: "value",
+							read: true,
+							write: true,
+						},
+						native: {
+							VOLUME
+						},
+	
+	
+					});
+	
+					await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".ZONECMD_POWER_OFF", {
+						type: "state",
+						common: {
+							name: "Zone_OFF",
+							type: "boolean",
+							role: "button",
+							read: false,
+							write: true,
+						},
+						native: {
+							ZONECMD_POWER_OFF
+						},
+	
+	
+					});
+	
+					await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".Status", {
+						type: "state",
+						common: {
+							name: "Status",
+							type: "string",
+							role: "text",
+							read: false,
+							write: true,
+						},
+						native: {
+						},
+	
+	
+					});
+	
+				} catch (error) { 
+					this.log.info("Error erstellung objekte "); }
+				}
+			}
 
 
 		} catch (e) {

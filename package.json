@@ -17,7 +17,7 @@
     "url": "https://github.com/TheBam1990/ioBroker.trivum"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.5.1",
+    "@iobroker/adapter-core": "^2.6.0",
     "axios": "^0.22.0",
     "xml-js": "^1.6.11",
     "xmlhttprequest": "^1.8.0"

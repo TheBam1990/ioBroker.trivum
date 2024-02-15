@@ -19,19 +19,11 @@
       	$('.value').each(function () {
       		var $key = $(this);
       		var id = $key.attr('id');
-      		if ($key.attr('type') === 'checkbox') {
-      			// do not call onChange direct, because onChange could expect some arguments
-      			$key.prop('checked', settings[id])
-      				.on('change', () => onChange())
-      				;
-      		} else {
       			// do not call onChange direct, because onChange could expect some arguments
       			$key.val(settings[id])
       				.on('change', () => onChange())
       				.on('keyup', () => onChange())
-      				;
-      		}
-      	});
+      	})
       	onChange(false);
       	// reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
       	if (M) M.updateTextFields();
@@ -42,15 +34,9 @@
       	// example: select elements with class=value and build settings object
       	var obj = {};
       	$('.value').each(function () {
-      		var $this = $(this);
-      		if ($this.attr('type') === 'checkbox') {
-      			obj[$this.attr('id')] = $this.prop('checked');
-      		} else if ($this.attr('type') === 'number') {
-      			obj[$this.attr('id')] = parseFloat($this.val());
-      		} else {
-      			obj[$this.attr('id')] = $this.val();
-      		}
-      	});
+      		var $this = $(this)
+      		obj[$this.attr('id')] = $this.val()
+      	})
       	callback(obj);
       }
     </script>
@@ -62,10 +48,8 @@
         <img src="trivum.png" class="logo">		<!-- Logo was angezeigt wird -->
       </div>
     </div>
-    </tr></table>
     <h6 class="translate">Manual</h6>
     <!--Anleitung Text liegt in der word.js -->
-    <table>
     <!-- Put your content here -->
     <!-- For example columns with settings: -->
     <div class="row">

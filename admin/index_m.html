@@ -15,7 +15,7 @@
       // This will be called by the admin adapter when the settings page loads
       function load(settings, onChange) {
       	// example: select elements with id=key and class=value and insert value
-      	if (!settings) return;
+      	if (!settings) return alert('settings are not defined')
       	$('.value').each(function () {
       		var $key = $(this);
       		var id = $key.attr('id');
@@ -50,8 +50,6 @@
     </div>
     <h6 class="translate">Manual</h6>
     <!--Anleitung Text liegt in der word.js -->
-    <!-- Put your content here -->
-    <!-- For example columns with settings: -->
     <div class="row">
       <div class="col s6 input-field">
         <input type="text" class="value" id="adresse" />		<!--Textfeld für die IP Adresse -->

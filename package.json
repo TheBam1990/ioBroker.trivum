@@ -18,12 +18,12 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.5.1",
-    "axios": "^0.22.0",
+    "axios": "^1.6.7",
     "xml-js": "^1.6.11",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "@alcalzone/release-script": "^2.2.1",
+    "@alcalzone/release-script": "^3.7.0",
     "@iobroker/testing": "^2.6.0",
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",

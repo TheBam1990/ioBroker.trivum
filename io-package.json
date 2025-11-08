@@ -92,6 +92,7 @@
         "extIcon": "https://raw.githubusercontent.com/TheBam1990/ioBroker.trivum/master/admin/trivum.png",
         "readme": "https://github.com/TheBam1990/ioBroker.trivum/blob/master/README.md",
         "loglevel": "info",
+        "tier": 2,
         "mode": "daemon",
         "type": "multimedia",
         "compact": true,

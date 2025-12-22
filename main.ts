@@ -9,16 +9,29 @@
 const utils = require("@iobroker/adapter-core");
 const convert = require("xml-js");
 const axios = require("axios").default;
+
+class ioBrokerState {
+	"ack": boolean
+	"val": number | boolean | string
+}
+
+class GeneratedItem {
+	"id" : string
+	"status" : string
+	"description" : string
+	"volume" : string
+}
+
 let devicesin;		//hilsvariable ob daten eingetragen sind oder nicht
-let IP;		//IP Adresse des Gerätes
-let getAllZonesURL;	//vollständige adresse für get all zone
+let IP: string;		//IP Adresse des Gerätes
+let getAllZonesURL: string;	//vollständige adresse für get all zone
 //let getstatusnowURL;  //Aktuelle status einer Zone alles zurück geben
 let getstatuschangeURL;  //nur änderungen einer Zone zurück geben
-const generatedArray = [];	//erstelltes Array aus der Get all zone
-let trivum_adapter;	//hilfsvariable für this.
-let timedefoults;	//Timer für verzögertes rücksetzen valou
-let time;		//kontrolle ob request zurück kommt wenn nicht nach 40sec. info.con. auf false
-let time2;		//1sec wartezeit nach get all aufruf bis zum schreiben der variablen
+const generatedArray: GeneratedItem[] = [];	//erstelltes Array aus der Get all zone
+let trivum_adapter:Trivum;	//hilfsvariable für this.
+let timedefoults: NodeJS.Timeout;	//Timer für verzögertes rücksetzen valou
+let time: NodeJS.Timeout;		//kontrolle ob request zurück kommt wenn nicht nach 40sec. info.con. auf false
+let time2: NodeJS.Timeout;		//1sec wartezeit nach get all aufruf bis zum schreiben der variablen
 const testing="1";		//prüfung für timeout request
 let paging;		//wie viele durchsagen soll es geben
 let ZONECMD_MUTE_ON;
@@ -28,20 +41,12 @@ let ZONECMD_DEFAULT_TUNER;
 let VOLUME;
 let ZONECMD_POWER_OFF;
 
-
-
-
-
-
-// Load your modules here, e.g.:
-// const fs = require("fs");
-
 class Trivum extends utils.Adapter {
 
 	/**
 	 * @param {Partial<utils.AdapterOptions>} [options={}]
 	 */
-	constructor(options) {
+	constructor(options: {}) {
 		super({
 			...options,
 			name: "trivum",
@@ -149,12 +154,6 @@ class Trivum extends utils.Adapter {
 			}
 		}
 
-
-			
-		
-
-	
-
 		/*for (const datapoint in this.generatedArray) {
 			let data;
 			await this.setObjectNotExistsAsync(nameFilter(this.config.devices[datapoint].name), {
@@ -232,8 +231,6 @@ class Trivum extends utils.Adapter {
 					trivum_adapter.log.debug("Timeout "+JSON.stringify(testing));
 				}
 			}catch (e){
-
-
 				trivum_adapter.getHttpData(getAllZonesURL);
 				time2=setTimeout(async function() {
 					for (const values in generatedArray) {
@@ -265,7 +262,7 @@ class Trivum extends utils.Adapter {
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
 	 * @param {() => void} callback
 	 */
-	onUnload(callback) {
+	onUnload(callback: Function) {
 		try {
 			// Here you must clear all timeouts or intervals that may still be active
 
@@ -281,31 +278,31 @@ class Trivum extends utils.Adapter {
 	}
 
 	//Anfrage für all Zone
-	async getHttpData(apiAdres){
+	async getHttpData(apiAdres: string){
 		try {
 			this.log.debug("test "+apiAdres);
 			const resp = await axios.get(apiAdres);
 			const result1 = convert.xml2json(resp.data, {compact: true, spaces: 4});
-			//var result2 = convert.xml2json(result, {compact: false, spaces: 4});
 			const result3=JSON.parse(result1);
 			trivum_adapter.log.debug("result3 "+JSON.stringify(result3));
-			for (const i in result3.rows.zone){
 
+			for (const i in result3.rows.zone){
+				//@ts-ignore
 				generatedArray[i] = {
 					"id" : result3.rows.zone[i].id._text,
 					"status" : result3.rows.zone[i].status._text,
 					"description" : result3.rows.zone[i].description._text,
 					"volume" : result3.rows.zone[i].volume._text,
 				};
-
 			}
 			await trivum_adapter.setStateAsync("info.connection", { val: true, ack: true });
 			trivum_adapter.log.debug("länge "+generatedArray.length);
 			trivum_adapter.log.debug(`erstelltes array ${JSON.stringify(generatedArray)}`);
 					//Zonen mit den variablen erstellen
-		// @ts-ignore
-		if(generatedArray!=""){
-			
+
+			if(!generatedArray)
+				return
+					
 			for (const test in generatedArray) {
 				try {
 					trivum_adapter.log.debug(`erstelltes array vor 1 erstellung ${JSON.stringify(generatedArray[test].description)}`);
@@ -318,8 +315,8 @@ class Trivum extends utils.Adapter {
 					ZONECMD_DEFAULT_TUNER="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=51";
 					ZONECMD_POWER_OFF="http://"+IP+"/xml/zone/runCommand.xml?zone=@"+test+"&command=1";
 					this.log.debug(`erstelltes array vor erstellung ${JSON.stringify(generatedArray[test].description)}`);
-	
-	
+
+
 					await trivum_adapter.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".Muten", {
 						type: "state",
 						common: {
@@ -334,7 +331,7 @@ class Trivum extends utils.Adapter {
 							ZONECMD_MUTE_OFF
 						},
 					});
-	
+
 					await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".DEFAULT_STREAMING", {
 						type: "state",
 						common: {
@@ -347,10 +344,10 @@ class Trivum extends utils.Adapter {
 						native: {
 							DEFAULT_STREAMING
 						},
-	
-	
+
+
 					});
-	
+
 					await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".ZONECMD_DEFAULT_TUNER", {
 						type: "state",
 						common: {
@@ -363,10 +360,8 @@ class Trivum extends utils.Adapter {
 						native: {
 							ZONECMD_DEFAULT_TUNER
 						},
-	
-	
 					});
-	
+
 					await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".VOLUME", {
 						type: "state",
 						common: {
@@ -379,10 +374,8 @@ class Trivum extends utils.Adapter {
 						native: {
 							VOLUME
 						},
-	
-	
 					});
-	
+
 					await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".ZONECMD_POWER_OFF", {
 						type: "state",
 						common: {
@@ -395,10 +388,8 @@ class Trivum extends utils.Adapter {
 						native: {
 							ZONECMD_POWER_OFF
 						},
-	
-	
 					});
-	
+
 					await this.setObjectNotExistsAsync(nameFilter(generatedArray[test].description)+".Status", {
 						type: "state",
 						common: {
@@ -410,15 +401,10 @@ class Trivum extends utils.Adapter {
 						},
 						native: {
 						},
-	
-	
 					});
-	
 				} catch (error) { 
 					this.log.info("Error erstellung objekte "); }
-				}
-			}
-
+		}
 
 		} catch (e) {
 			trivum_adapter.log.error(e);
@@ -444,13 +430,14 @@ class Trivum extends utils.Adapter {
 	// 	}
 	// }
 
+
 	/**
 	 * Is called if a subscribed state changes
 	 * @param {string} id
 	 * @param {ioBroker.State | null | undefined} state
 	 */
 	//änderungen an states überwachen und zum gerät schreiben
-	async onStateChange(id, state) {
+	async onStateChange(id: string, state: ioBrokerState | null | undefined) {
 		if (state && state.ack === false) {
 			// The state was changed and Ack
 			this.log.debug(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
@@ -517,7 +504,7 @@ class Trivum extends utils.Adapter {
 					break;
 
 				case "VOLUME":
-					if (state.val!=null && state.val<10){
+					if (state.val!=null && (state.val as number) < 10){
 						state.val="0"+state.val;
 					}
 					axios(obj.native.VOLUME+state.val);
@@ -532,7 +519,7 @@ class Trivum extends utils.Adapter {
 		}
 	}
 
-	async valueres (id){
+	async valueres (id: string){
 		timedefoults = setTimeout(async function(){
 			await trivum_adapter.setStateAsync(id, {val: false, ack: true, });
 		},3000);
@@ -558,8 +545,7 @@ class Trivum extends utils.Adapter {
 
 }
 
-
-function nameFilter(name) {
+function nameFilter(name: string) {
 	const signs = [String.fromCharCode(46), String.fromCharCode(44), String.fromCharCode(92), String.fromCharCode(47), String.fromCharCode(91), String.fromCharCode(93), String.fromCharCode(123), String.fromCharCode(125), String.fromCharCode(32), String.fromCharCode(129), String.fromCharCode(154), String.fromCharCode(132), String.fromCharCode(142), String.fromCharCode(148), String.fromCharCode(153)]; //46=. 44=, 92=\ 47=/ 91=[ 93=] 123={ 125=} 32=Space 129=ü 154=Ü 132=ä 142=Ä 148=ö 153=Ö
 	signs.forEach((item) => {
 		const count = name.split(item).length - 1;
@@ -577,18 +563,14 @@ function nameFilter(name) {
 	return name;
 }
 
-
-
-
 // @ts-ignore parent is a valid property on module
 if (module.parent) {
 	// Export the constructor in compact mode
 	/**
 	 * @param {Partial<utils.AdapterOptions>} [options={}]
 	 */
-	module.exports = (options) => new Trivum(options);
+	module.exports = (options: {}) => new Trivum(options);
 } else {
 	// otherwise start the instance directly
-	new Trivum();
+	new Trivum({});
 }
-

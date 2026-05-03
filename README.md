@@ -59,6 +59,8 @@ Then the respective control elements under the individual zones:
 ### 0.0.1
 * (TheBam) First version to control your Trivum Multiroom Systems
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 MIT License
 

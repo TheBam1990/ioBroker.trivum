@@ -43,6 +43,10 @@ Then the respective control elements under the individual zones:
 
 ## Changelog
 
+
+### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+
 ### 0.0.5 (2021-10-13)
 -updating main
 

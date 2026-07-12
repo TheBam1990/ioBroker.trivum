@@ -1,0 +1,11 @@
+{
+  "type": "panel",
+  "i18n": false,
+  "items": {
+    "intro": { "type": "infoBox", "text": { "en": "Enter the trivum MusicCenter IP address. Zones and their controls are discovered automatically.", "de": "IP-Adresse des trivum MusicCenters eingeben. Zonen und deren Steuerungen werden automatisch erkannt." }, "newLine": true, "xs": 12 },
+    "adresse": { "type": "ip", "label": { "en": "trivum IP address", "de": "trivum-IP-Adresse" }, "onlyIp4": true, "xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3 },
+    "option3": { "type": "number", "label": { "en": "Number of paging presets", "de": "Anzahl der Durchsage-Vorlagen" }, "min": 0, "max": 100, "xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3 },
+    "pollInterval": { "type": "number", "label": { "en": "Polling interval (ms)", "de": "Abfrageintervall (ms)" }, "min": 1000, "xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3 },
+    "timeout": { "type": "number", "label": { "en": "HTTP timeout (ms)", "de": "HTTP-Timeout (ms)" }, "min": 1000, "xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3 }
+  }
+}

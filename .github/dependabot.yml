@@ -1,12 +1,12 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: "/"
-    schedule:
-      interval: weekly
-      time: "20:00"
-      timezone: Europe/Berlin
-    open-pull-requests-limit: 20
-    assignees:
-      - TheBam1990
-    versioning-strategy: increase
+    directory: /
+    schedule: { interval: weekly }
+    cooldown: { default-days: 7 }
+    ignore:
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }

@@ -3,8 +3,11 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {},
 	"include": [
-		"**/*.js",
-		"**/*.d.ts"
+    "main.js",
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "test/**/*.js",
+    "main.test.js"
 	],
 	"exclude": [
 		"**/build",

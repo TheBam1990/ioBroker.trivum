@@ -1,0 +1,11 @@
+name: Auto-merge Dependabot
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+permissions: { contents: write, pull-requests: write, checks: read }
+jobs:
+  auto-merge:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: iobroker-bot-orga/action-automerge-dependabot@v1

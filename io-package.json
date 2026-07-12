@@ -1,137 +1,54 @@
 {
-    "common": {
-        "name": "trivum",
-        "version": "0.0.4",
-        "news": {
-            "0.0.4": {
-                "en": "Paging added and info.connection fixed for admin 5",
-                "de": "Paging hinzugefügt und info.connection für Admin behoben 5",
-                "ru": "Добавлен пейджинг и исправлено соединение с администратором 5",
-                "pt": "Paginação adicionada e info.connection corrigida para o administrador 5",
-                "nl": "Paging toegevoegd en info.connection gerepareerd voor admin 5",
-                "fr": "Pagination ajoutée et info.connection corrigée pour admin 5",
-                "it": "Paging aggiunto e info.connection risolto per l'amministratore 5",
-                "es": "Se agregó paginación y se corrigió la conexión de información para el administrador 5",
-                "pl": "Dodano stronicowanie i naprawiono info.connection dla administratora 5",
-                "zh-cn": "添加了分页并为管理员 5 修复了 info.connection"
-            },
-            "0.0.3": {
-                "en": "Cleaning the code",
-                "de": "Code bereinigen",
-                "ru": "Очистка кода",
-                "pt": "Limpando o código",
-                "nl": "De code opschonen",
-                "fr": "Nettoyer le code",
-                "it": "Pulizia del codice",
-                "es": "Limpiando el código",
-                "pl": "Czyszczenie kodu",
-                "zh-cn": "清理代码"
-            },
-            "0.0.2": {
-                "en": "Cleaning the code",
-                "de": "Code bereinigen",
-                "ru": "Очистка кода",
-                "pt": "Limpando o código",
-                "nl": "De code opschonen",
-                "fr": "Nettoyer le code",
-                "it": "Pulizia del codice",
-                "es": "Limpiando el código",
-                "pl": "Czyszczenie kodu",
-                "zh-cn": "清理代码"
-            },
-            "0.0.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
-            }
-        },
-        "titleLang": {
-            "en": "trivum",
-            "de": "trivum",
-            "ru": "тривиум",
-            "pt": "trivum",
-            "nl": "trivum",
-            "fr": "trivum",
-            "it": "trivum",
-            "es": "trivum",
-            "pl": "trywialny",
-            "zh-cn": "琐事"
-        },
-        "desc": {
-            "en": "trivum multiroom system",
-            "de": "Trivum Multiroom-System",
-            "ru": "мультирум система trivum",
-            "pt": "sistema trivum multiroom",
-            "nl": "trivum multiroom-systeem",
-            "fr": "système multiroom trivum",
-            "it": "sistema trivum multiroom",
-            "es": "sistema trivum multiroom",
-            "pl": "Trivum system multiroom",
-            "zh-cn": "琐事多室系统"
-        },
-        "authors": [
-            "TheBam <elektrobam@gmx.de>"
-        ],
-        "keywords": [
-            "Hardware",
-            "Multiroom"
-        ],
-        "licenseInformation": {
-            "type": "free",
-            "license": "MIT"
-        },
-        "platform": "Javascript/Node.js",
-        "icon": "trivum.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/TheBam1990/ioBroker.trivum/master/admin/trivum.png",
-        "readme": "https://github.com/TheBam1990/ioBroker.trivum/blob/master/README.md",
-        "loglevel": "info",
-        "tier": 2,
-        "mode": "daemon",
-        "type": "multimedia",
-        "compact": true,
-        "connectionType": "local",
-        "dataSource": "poll",
-        "materialize": true,
-        "dependencies": [
-            {
-                "js-controller": ">=2.0.0"
-            }
-        ]
+  "common": {
+    "name": "trivum",
+    "version": "0.1.0",
+    "news": {
+      "0.1.0": {
+        "en": "Modernized runtime and responsive administration UI with reliable zone discovery, polling and command handling.",
+        "de": "Laufzeit und responsive Administration mit zuverlässiger Zonenerkennung, Abfrage und Befehlsverarbeitung modernisiert.",
+        "ru": "Обновлены среда выполнения и адаптивный интерфейс, обнаружение зон, опрос и команды.",
+        "pt": "Runtime e administração responsiva modernizados, com descoberta, consulta e comandos de zonas fiáveis.",
+        "nl": "Runtime en responsieve beheerinterface gemoderniseerd met betrouwbare zonedetectie, polling en opdrachten.",
+        "fr": "Environnement et interface responsive modernisés avec détection, interrogation et commandes fiables des zones.",
+        "it": "Runtime e interfaccia responsiva modernizzati con rilevamento, polling e comandi affidabili delle zone.",
+        "es": "Entorno e interfaz adaptable modernizados con detección, consulta y comandos fiables de zonas.",
+        "pl": "Zmodernizowano środowisko i interfejs oraz wykrywanie, odpytywanie i sterowanie strefami.",
+        "uk": "Оновлено середовище та адаптивний інтерфейс, виявлення зон, опитування й команди.",
+        "zh-cn": "更新运行环境和响应式管理界面，改进区域发现、轮询及命令处理。"
+      },
+      "0.0.5": {
+        "en": "Updated adapter core.", "de": "Adapterkern aktualisiert.", "ru": "Обновлено ядро адаптера.", "pt": "Núcleo do adaptador atualizado.", "nl": "Adapterkern bijgewerkt.", "fr": "Noyau de l'adaptateur mis à jour.", "it": "Core dell'adattatore aggiornato.", "es": "Núcleo del adaptador actualizado.", "pl": "Zaktualizowano rdzeń adaptera.", "uk": "Оновлено ядро адаптера.", "zh-cn": "更新适配器核心。"
+      }
     },
-    "native": {
-        "adresse": "",
-        "option3": ""
+    "titleLang": { "en": "trivum", "de": "trivum", "ru": "trivum", "pt": "trivum", "nl": "trivum", "fr": "trivum", "it": "trivum", "es": "trivum", "pl": "trivum", "uk": "trivum", "zh-cn": "trivum" },
+    "desc": {
+      "en": "Control trivum multiroom audio systems from ioBroker", "de": "trivum-Multiroom-Audiosysteme mit ioBroker steuern", "ru": "Управление аудиосистемами trivum multiroom из ioBroker", "pt": "Controlar sistemas de áudio multiroom trivum pelo ioBroker", "nl": "trivum multiroom-audio bedienen vanuit ioBroker", "fr": "Contrôler les systèmes audio multiroom trivum depuis ioBroker", "it": "Controlla i sistemi audio multiroom trivum da ioBroker", "es": "Controla sistemas de audio multiroom trivum desde ioBroker", "pl": "Sterowanie systemami audio multiroom trivum z ioBroker", "uk": "Керування аудіосистемами trivum multiroom з ioBroker", "zh-cn": "通过 ioBroker 控制 trivum 多房间音频系统"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "If connected to my gateway",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
-    ]
+    "authors": ["TheBam <elektrobam@gmx.de>"],
+    "keywords": ["trivum", "multiroom", "audio"],
+    "licenseInformation": { "type": "free", "license": "MIT" },
+    "platform": "Javascript/Node.js",
+    "icon": "trivum.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/TheBam1990/ioBroker.trivum/master/admin/trivum.png",
+    "readme": "https://github.com/TheBam1990/ioBroker.trivum/blob/master/README.md",
+    "loglevel": "info",
+    "tier": 2,
+    "mode": "daemon",
+    "type": "multimedia",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "poll",
+    "adminUI": { "config": "json" },
+    "dependencies": [{ "js-controller": ">=6.0.11" }],
+    "globalDependencies": [{ "admin": ">=7.6.20" }]
+  },
+  "native": { "adresse": "", "option3": 0, "pollInterval": 5000, "timeout": 10000 },
+  "objects": [],
+  "instanceObjects": [
+    { "_id": "info", "type": "channel", "common": { "name": "Information" }, "native": {} },
+    { "_id": "info.connection", "type": "state", "common": { "role": "indicator.connected", "name": "trivum connected", "type": "boolean", "read": true, "write": false, "def": false }, "native": {} },
+    { "_id": "info.lastError", "type": "state", "common": { "role": "text", "name": "Last error", "type": "string", "read": true, "write": false, "def": "" }, "native": {} },
+    { "_id": "info.lastUpdate", "type": "state", "common": { "role": "value.time", "name": "Last successful update", "type": "number", "read": true, "write": false, "def": 0 }, "native": {} }
+  ]
 }

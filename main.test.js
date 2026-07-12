@@ -1,30 +1,20 @@
-"use strict";
+'use strict';
 
-/**
- * This is a dummy TypeScript test file using chai and mocha
- *
- * It's automatically excluded from npm and its build output is excluded from both git and npm.
- * It is advised to test all your modules with accompanying *.test.js-files
- */
+const { expect } = require('chai');
+const { normalizeHost, parseActiveZones, parseZones, zoneKey } = require('./lib/trivum-api');
 
-// tslint:disable:no-unused-expression
-
-const { expect } = require("chai");
-// import { functionToTest } from "./moduleToTest";
-
-describe("module to test => function to test", () => {
-	// initializing logic
-	const expected = 5;
-
-	it(`should return ${expected}`, () => {
-		const result = 5;
-		// assign result a value from functionToTest
-		expect(result).to.equal(expected);
-		// or using the should() syntax
-		result.should.equal(expected);
-	});
-	// ... more tests => it
-
+describe('trivum XML parsing', () => {
+    it('parses one or multiple zones', () => {
+        const zones = parseZones(
+            '<rows><zone><id>3</id><description>Living room</description><status>playing</status><volume>42</volume></zone></rows>',
+        );
+        expect(zones).to.deep.equal([{ id: '3', description: 'Living room', status: 'playing', volume: 42 }]);
+    });
+    it('parses active-zone changes', () => {
+        expect(parseActiveZones('<rows><system><activeZones>2</activeZones></system></rows>')).to.equal('2');
+    });
+    it('normalizes hosts and object IDs', () => {
+        expect(normalizeHost('http://192.168.1.5/')).to.equal('192.168.1.5');
+        expect(zoneKey('Küche / EG', '1')).to.equal('Kuche_EG');
+    });
 });
-
-// ... more test suites => describe
